@@ -1,4 +1,4 @@
-package me.vaimon.healthtracker.ui.theme
+package me.vaimon.healthtracker.theme
 
 import androidx.compose.ui.graphics.Color
 
