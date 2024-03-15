@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HealthTracker</string>
+    <string name="action_start_walk">Start walk</string>
+    <string name="header_last_activity">Last activity</string>
 </resources>
