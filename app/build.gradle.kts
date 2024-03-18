@@ -67,8 +67,15 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.viewmodel)
 
+    // DI
     implementation(libs.hilt)
     ksp(libs.hilt.compiler)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    annotationProcessor(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
 
     // Navigation
     implementation(libs.navigation)
