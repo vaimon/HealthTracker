@@ -37,9 +37,14 @@ val Typography = Typography(
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
     ),
+    labelSmall = TextStyle(
+        fontFamily = figTreeFamily,
+        fontWeight = FontWeight.Bold,
+        fontSize = 12.sp,
+    ),
 )
 
-val Typography.labelError: TextStyle
+val Typography.labelStub: TextStyle
     @Composable
     get() {
         return TextStyle(

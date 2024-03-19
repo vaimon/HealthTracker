@@ -6,10 +6,13 @@ sealed class Resource<out T : Any> {
     data object Loading : Resource<Nothing>()
 }
 
-fun <T : Any, U : Any> Resource<List<T>>.map(transformer: (T) -> U): Resource<List<U>> {
+fun <T : Any, U : Any> Resource<T>.map(transformer: (T) -> U): Resource<U> {
     return when (this) {
-        is Resource.Success -> Resource.Success(this.data.map { transformer(it) })
+        is Resource.Success -> Resource.Success(transformer(this.data))
         is Resource.Error -> Resource.Error(this.exception)
         is Resource.Loading -> Resource.Loading
     }
 }
+
+fun <T : Any, U : Any> Resource<List<T>>.mapList(transformer: (T) -> U): Resource<List<U>> =
+    this.map { it.map(transformer) }

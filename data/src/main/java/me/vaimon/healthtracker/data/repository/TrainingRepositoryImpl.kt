@@ -1,5 +1,6 @@
 package me.vaimon.healthtracker.data.repository
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
@@ -28,6 +29,7 @@ class TrainingRepositoryImpl @Inject constructor(
             }.onStart {
                 emit(Resource.Loading)
             }.catch {
+                Log.e("HealthTracker_TrainingRepo", it.toString())
                 emit(Resource.Error(it))
             }
 }

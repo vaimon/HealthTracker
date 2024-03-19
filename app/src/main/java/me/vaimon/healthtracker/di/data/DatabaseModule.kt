@@ -10,6 +10,7 @@ import dagger.hilt.components.SingletonComponent
 import me.vaimon.healthtracker.data.datasource.db.AppDatabase
 import me.vaimon.healthtracker.data.datasource.db.dao.RoutePointDao
 import me.vaimon.healthtracker.data.datasource.db.dao.TrainingDao
+import me.vaimon.healthtracker.data.datasource.db.migrations.Migration1to2
 import javax.inject.Singleton
 
 @Module
@@ -19,10 +20,10 @@ class DatabaseModule {
     @Provides
     fun provideAppDb(@ApplicationContext context: Context): AppDatabase {
         return Room.databaseBuilder(
-            context, AppDatabase::class.java,
-            AppDatabase.DATABASE_NAME
+            context, AppDatabase::class.java, AppDatabase.DATABASE_NAME
         )
-            .fallbackToDestructiveMigration()
+            .createFromAsset("db/db_seed.db")
+            .addMigrations(Migration1to2)
             .build()
     }
 

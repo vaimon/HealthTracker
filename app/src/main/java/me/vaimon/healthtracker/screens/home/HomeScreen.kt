@@ -1,34 +1,39 @@
 package me.vaimon.healthtracker.screens.home
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.ButtonDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -38,9 +43,16 @@ import me.vaimon.healthtracker.R
 import me.vaimon.healthtracker.domain.util.Resource
 import me.vaimon.healthtracker.models.Training
 import me.vaimon.healthtracker.navigation.NavigationDestination
+import me.vaimon.healthtracker.screens.home.components.LargeActionButton
+import me.vaimon.healthtracker.screens.home.components.ResourceLoading
+import me.vaimon.healthtracker.screens.home.components.TextStub
 import me.vaimon.healthtracker.theme.HealthTrackerTheme
-import me.vaimon.healthtracker.theme.labelError
 import me.vaimon.healthtracker.util.ExceptionTranslator
+import me.vaimon.healthtracker.util.PreviewSampleData
+import me.vaimon.healthtracker.util.conditional
+import me.vaimon.healthtracker.util.vertical
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
 object HomeScreenDestination : NavigationDestination {
     override val route = "home"
@@ -81,7 +93,8 @@ fun HomeScreen(
 
 @Composable
 fun HomeBody(
-    trainings: Resource<List<Training>>,
+    trainings:
+    Resource<Map<LocalDate, List<Training>>>,
     modifier: Modifier = Modifier
 ) {
     val innerPaddingModifier = Modifier.padding(PaddingValues(horizontal = 16.dp))
@@ -102,7 +115,7 @@ fun HomeBody(
             modifier = innerPaddingModifier
         )
         when (trainings) {
-            is Resource.Error -> ErrorStub(errorMessage = ExceptionTranslator.translate(trainings.exception))
+            is Resource.Error -> TextStub(errorMessage = ExceptionTranslator.translate(trainings.exception))
             is Resource.Loading -> ResourceLoading()
             is Resource.Success -> ActivityCalendar(activityData = trainings.data)
         }
@@ -111,74 +124,104 @@ fun HomeBody(
 
 @Composable
 fun ActivityCalendar(
-    activityData: List<Training>,
+    activityData: Map<LocalDate, List<Training>>,
     modifier: Modifier = Modifier
 ) {
+    var selectedKey by rememberSaveable { mutableStateOf(LocalDate.now()) }
+
+    if (activityData.isEmpty()) {
+        TextStub(errorMessage = R.string.warning_no_trainings)
+        return
+    }
+
+    ActivityCalendarRow(
+        selectedDate = selectedKey,
+        activityStats = activityData.mapValues { it.value.size }.toList().reversed(),
+        onDaySelected = { selectedKey = it },
+    )
+
     LazyColumn(
         modifier = modifier.fillMaxSize()
     ) {
-        items(activityData) {
+        items(activityData[selectedKey] ?: emptyList()) {
             Text(it.id.toString() + "/ " + it.startTime.toString())
         }
     }
 }
 
 @Composable
-fun ResourceLoading(
-    modifier: Modifier = Modifier
+private fun ActivityCalendarRow(
+    selectedDate: LocalDate,
+    activityStats: List<Pair<LocalDate, Int>>,
+    onDaySelected: (LocalDate) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
-    Box(modifier = modifier.fillMaxSize()) {
-        CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center)
-        )
+    val datePattern = remember {
+        DateTimeFormatter.ofPattern("dd.MM")
+    }
+
+    val graphScaling = remember {
+        1.0 / (activityStats.maxBy { it.second }.second)
+    }
+
+    LazyRow(
+        reverseLayout = true,
+        horizontalArrangement = Arrangement.SpaceEvenly,
+        contentPadding = PaddingValues(16.dp),
+        modifier = modifier
+            .fillMaxWidth()
+    ) {
+        items(activityStats.reversed()) { dateToActivity ->
+            Column(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(32.dp))
+                    .conditional(selectedDate == dateToActivity.first) {
+                        background(MaterialTheme.colorScheme.surface)
+                    }
+                    .clickable {
+                        onDaySelected(dateToActivity.first)
+                    }
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                val canvasSize = 100
+                Column(
+                    verticalArrangement = Arrangement.Bottom,
+                    modifier = Modifier.defaultMinSize(minHeight = canvasSize.dp)
+                ) {
+                    Spacer(
+                        Modifier
+                            .width(16.dp)
+                            .height((canvasSize * graphScaling * (dateToActivity.second)).dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(MaterialTheme.colorScheme.primary)
+                    )
+                }
+                Spacer(Modifier.height(8.dp))
+                Text(
+                    dateToActivity.first.format(datePattern),
+                    style = MaterialTheme.typography.labelSmall,
+                    modifier = Modifier
+                        .vertical()
+                        .rotate(-90f)
+                )
+            }
+        }
     }
 }
 
+@Preview
 @Composable
-fun ErrorStub(
-    @StringRes errorMessage: Int,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(32.dp)
-    ) {
-        Text(
-            text = stringResource(id = errorMessage),
-            textAlign = TextAlign.Center,
-            style = MaterialTheme.typography.labelError,
-        )
-    }
-}
-
-@Composable
-fun LargeActionButton(
-    @DrawableRes icon: Int,
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TextButton(
-        onClick = onClick,
-        colors = ButtonDefaults.textButtonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
-            contentColor = MaterialTheme.colorScheme.onPrimary
-        ),
-        contentPadding = PaddingValues(vertical = 16.dp, horizontal = 64.dp),
-        modifier = modifier
-    ) {
-        Icon(
-            painter = painterResource(id = icon),
-            contentDescription = null,
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = text,
-            style = MaterialTheme.typography.labelLarge,
-            fontSize = 18.sp
-        )
+fun HomePreviewEmptyList() {
+    HealthTrackerTheme {
+        Scaffold {
+            HomeBody(
+                Resource.Success(emptyMap()),
+                modifier = Modifier
+                    .padding(it)
+                    .fillMaxSize()
+            )
+        }
     }
 }
 
@@ -188,7 +231,7 @@ fun HomePreview() {
     HealthTrackerTheme {
         Scaffold {
             HomeBody(
-                Resource.Success(emptyList()),
+                trainings = PreviewSampleData.trainings,
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()

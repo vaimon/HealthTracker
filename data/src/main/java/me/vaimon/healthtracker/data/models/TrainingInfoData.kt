@@ -6,6 +6,6 @@ import androidx.room.PrimaryKey
 @Entity(tableName = "trainings")
 data class TrainingInfoData(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
-    val startTime: Long?,
+    val startTime: Long,
     val endTime: Long?,
 )
