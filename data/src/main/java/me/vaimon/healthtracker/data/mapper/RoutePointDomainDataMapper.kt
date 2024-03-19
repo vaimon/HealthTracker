@@ -2,6 +2,7 @@ package me.vaimon.healthtracker.data.mapper
 
 import me.vaimon.healthtracker.data.models.RoutePointData
 import me.vaimon.healthtracker.domain.entity.RoutePointEntity
+import me.vaimon.healthtracker.domain.util.Mapper
 import javax.inject.Inject
 
 class RoutePointDomainDataMapper @Inject constructor() : Mapper<RoutePointEntity, RoutePointData> {

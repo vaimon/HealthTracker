@@ -2,9 +2,10 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
 
     id(libs.plugins.safeArgs.get().pluginId)
+//    alias(libs.plugins.ksp)
+    kotlin("kapt")
 }
 
 android {
@@ -68,14 +69,16 @@ dependencies {
     implementation(libs.viewmodel)
 
     // DI
+    implementation(libs.javax.inject)
     implementation(libs.hilt)
-    ksp(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+    kapt(libs.hilt.compiler)
 
     // Room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    ksp(libs.androidx.room.compiler)
+    kapt(libs.androidx.room.compiler)
 
     // Navigation
     implementation(libs.navigation)

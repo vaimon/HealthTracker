@@ -4,6 +4,7 @@ import me.vaimon.healthtracker.data.models.RoutePointData
 import me.vaimon.healthtracker.data.models.TrainingData
 import me.vaimon.healthtracker.domain.entity.RoutePointEntity
 import me.vaimon.healthtracker.domain.entity.TrainingEntity
+import me.vaimon.healthtracker.domain.util.Mapper
 import javax.inject.Inject
 
 class TrainingDomainDataMapper @Inject constructor(

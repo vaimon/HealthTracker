@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">HealthTracker</string>
-    <string name="action_start_walk">Start walk</string>
+    <string name="action_start_walk">Start a walk</string>
     <string name="header_last_activity">Last activity</string>
+    <string name="error_no_internet">It seems to be that you don\'t have an access to Internet</string>
+    <string name="error_illegal_state">Something unexpected happened.\nTry again</string>
+    <string name="error_unknown">Something went wrong :(\nTry again</string>
 </resources>

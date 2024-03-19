@@ -7,7 +7,11 @@ import me.vaimon.healthtracker.data.datasource.db.dao.TrainingDao
 import me.vaimon.healthtracker.data.models.RoutePointData
 import me.vaimon.healthtracker.data.models.TrainingInfoData
 
-@Database(entities = [TrainingInfoData::class, RoutePointData::class], version = 1)
+@Database(
+    entities = [TrainingInfoData::class, RoutePointData::class],
+    exportSchema = false,
+    version = 1
+)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun trainingDao(): TrainingDao
 

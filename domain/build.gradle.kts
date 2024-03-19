@@ -9,5 +9,8 @@ java {
 }
 
 dependencies{
+    implementation(libs.kotlin.coroutines)
+
+    // DI
     implementation(libs.javax.inject)
 }

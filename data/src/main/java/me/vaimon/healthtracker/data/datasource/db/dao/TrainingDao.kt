@@ -1,12 +1,15 @@
 package me.vaimon.healthtracker.data.datasource.db.dao
 
+import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Update
+import kotlinx.coroutines.flow.Flow
 import me.vaimon.healthtracker.data.models.TrainingData
 import me.vaimon.healthtracker.data.models.TrainingInfoData
 
+@Dao
 interface TrainingDao {
 
     @Insert
@@ -17,5 +20,5 @@ interface TrainingDao {
 
     @Transaction
     @Query("SELECT * FROM trainings")
-    fun getUsersWithPlaylists(): List<TrainingData>
+    fun getAllTrainings(): Flow<List<TrainingData>>
 }

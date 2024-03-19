@@ -1,4 +1,4 @@
-package me.vaimon.healthtracker.data.mapper
+package me.vaimon.healthtracker.domain.util
 
 interface Mapper<T, E> {
     fun from(e: E): T

@@ -4,6 +4,7 @@ ksp = "1.9.22-1.0.17"
 javaxInject = "1"
 kotlin = "1.9.22"
 coreKtx = "1.12.0"
+coroutines = "1.8.0"
 
 lifecycleRuntimeKtx = "2.7.0"
 activityCompose = "1.8.2"
@@ -19,10 +20,12 @@ roomVersion = "2.6.1"
 viewmodel = "2.7.0"
 
 hilt = "2.50"
+hilt-navigation = "1.2.0"
 jetbrainsKotlinJvm = "1.9.22"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+kotlin-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "coroutines" }
 
 androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
@@ -46,6 +49,7 @@ androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "
 
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }
 hilt-compiler = { group = "com.google.dagger", name = "hilt-android-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-compose", version.ref = "hilt-navigation" }
 javax-inject = { module = "javax.inject:javax.inject", version.ref = "javaxInject" }
 
 junit = { group = "junit", name = "junit", version.ref = "junit" }

@@ -1,6 +1,7 @@
 package me.vaimon.healthtracker.theme
 
 import androidx.compose.material3.Typography
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -37,3 +38,14 @@ val Typography = Typography(
         fontSize = 14.sp,
     ),
 )
+
+val Typography.labelError: TextStyle
+    @Composable
+    get() {
+        return TextStyle(
+            fontFamily = figTreeFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 18.sp,
+            color = Grey
+        )
+    }
