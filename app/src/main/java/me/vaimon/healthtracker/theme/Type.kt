@@ -27,6 +27,11 @@ val Typography = Typography(
         fontWeight = FontWeight.Black,
         fontSize = 32.sp,
     ),
+    titleMedium = TextStyle(
+        fontFamily = figTreeFamily,
+        fontWeight = FontWeight.Black,
+        fontSize = 24.sp,
+    ),
     labelLarge = TextStyle(
         fontFamily = figTreeFamily,
         fontWeight = FontWeight.Bold,
@@ -51,6 +56,17 @@ val Typography.labelStub: TextStyle
             fontFamily = figTreeFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 18.sp,
+            color = Grey
+        )
+    }
+
+val Typography.labelSecondary: TextStyle
+    @Composable
+    get() {
+        return TextStyle(
+            fontFamily = figTreeFamily,
+            fontWeight = FontWeight.Medium,
+            fontSize = 12.sp,
             color = Grey
         )
     }

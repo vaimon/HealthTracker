@@ -6,4 +6,9 @@ import me.vaimon.healthtracker.domain.util.Resource
 
 interface TrainingRepository {
     fun getAllTrainings(): Flow<Resource<List<TrainingEntity>>>
+
+    fun getTrainingsByPeriod(
+        startDateTimestamp: Long,
+        endDateTimestamp: Long
+    ): Flow<Resource<List<TrainingEntity>>>
 }

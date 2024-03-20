@@ -15,12 +15,12 @@ import me.vaimon.healthtracker.domain.util.Mapper
 import me.vaimon.healthtracker.domain.util.Resource
 import javax.inject.Inject
 
+@Suppress("USELESS_CAST")
 class TrainingRepositoryImpl @Inject constructor(
     private val trainingDao: TrainingDao,
     private val trainingMapper: Mapper<TrainingEntity, TrainingData>
 ) : TrainingRepository {
 
-    @Suppress("USELESS_CAST")
     override fun getAllTrainings(): Flow<Resource<List<TrainingEntity>>> =
         trainingDao.getAllTrainings()
             .flowOn(Dispatchers.IO)
@@ -29,7 +29,22 @@ class TrainingRepositoryImpl @Inject constructor(
             }.onStart {
                 emit(Resource.Loading)
             }.catch {
-                Log.e("HealthTracker_TrainingRepo", it.toString())
+                Log.e("HT_TrainingRepo_getAll", it.toString())
+                emit(Resource.Error(it))
+            }
+
+    override fun getTrainingsByPeriod(
+        startDateTimestamp: Long,
+        endDateTimestamp: Long
+    ): Flow<Resource<List<TrainingEntity>>> =
+        trainingDao.getTrainingsInPeriod(startDateTimestamp, endDateTimestamp)
+            .flowOn(Dispatchers.IO)
+            .map {
+                Resource.Success(it.map { trainingMapper.from(it) }) as Resource<List<TrainingEntity>>
+            }.onStart {
+                emit(Resource.Loading)
+            }.catch {
+                Log.e("HT_TrainingRepo_getByDate", it.toString())
                 emit(Resource.Error(it))
             }
 }
