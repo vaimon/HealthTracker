@@ -19,6 +19,10 @@
     <string name="measure_km">%1$.2f km</string>
 
     <string name="skipped_value" translatable="false">-</string>
+    <string name="desc_back">Back</string>
+    <string name="label_avg_speed">Avg. Speed</string>
+    <string name="label_distance">Distance</string>
+    <string name="label_total_time">Total time</string>
 
     <plurals name="number_trainings">
         <item quantity="one">%1$d training</item>

@@ -21,18 +21,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import me.vaimon.healthtracker.R
 import me.vaimon.healthtracker.domain.util.Resource
 import me.vaimon.healthtracker.models.TrainingDay
 import me.vaimon.healthtracker.navigation.NavigationDestination
+import me.vaimon.healthtracker.screens.components.ResourceLoading
 import me.vaimon.healthtracker.screens.home.components.ActivityCalendar
 import me.vaimon.healthtracker.screens.home.components.LargeActionButton
-import me.vaimon.healthtracker.screens.home.components.ResourceLoading
 import me.vaimon.healthtracker.screens.home.components.TextStub
+import me.vaimon.healthtracker.screens.training_details.TrainingDetailsDestination
 import me.vaimon.healthtracker.theme.HealthTrackerTheme
+import me.vaimon.healthtracker.theme.titleMediumSmall
 import me.vaimon.healthtracker.util.ExceptionTranslator
 import me.vaimon.healthtracker.util.PreviewSampleData
 import java.time.LocalDate
@@ -56,8 +57,7 @@ fun HomeScreen(
                 title = {
                     Text(
                         stringResource(R.string.app_name),
-                        style = MaterialTheme.typography.titleMedium,
-                        fontSize = 20.sp
+                        style = MaterialTheme.typography.titleMediumSmall,
                     )
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(containerColor = MaterialTheme.colorScheme.background)
@@ -68,7 +68,10 @@ fun HomeScreen(
             modifier.padding(it)
         ) {
             HomeBody(
-                trainingList.value
+                trainings = trainingList.value,
+                navigateToTrainingDetails = {
+                    navController.navigate(TrainingDetailsDestination.getDestinationWithArg(it))
+                }
             )
         }
     }
@@ -76,8 +79,8 @@ fun HomeScreen(
 
 @Composable
 fun HomeBody(
-    trainings:
-    Resource<Map<LocalDate, TrainingDay>>,
+    trainings: Resource<Map<LocalDate, TrainingDay>>,
+    navigateToTrainingDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val innerPaddingModifier = Modifier.padding(PaddingValues(horizontal = 16.dp))
@@ -104,7 +107,10 @@ fun HomeBody(
             when (trainings) {
                 is Resource.Error -> TextStub(message = ExceptionTranslator.translate(trainings.exception))
                 is Resource.Loading -> ResourceLoading()
-                is Resource.Success -> ActivityCalendar(activityData = trainings.data)
+                is Resource.Success -> ActivityCalendar(
+                    activityData = trainings.data,
+                    navigateToTrainingDetails = navigateToTrainingDetails
+                )
             }
         }
 
@@ -118,6 +124,7 @@ fun HomePreviewEmptyList() {
         Scaffold {
             HomeBody(
                 Resource.Success(emptyMap()),
+                {},
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
@@ -133,6 +140,7 @@ fun HomePreview() {
         Scaffold {
             HomeBody(
                 trainings = PreviewSampleData.trainings,
+                {},
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
@@ -148,6 +156,7 @@ fun HomePreviewError() {
         Scaffold {
             HomeBody(
                 Resource.Error(IllegalStateException()),
+                {},
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
@@ -163,6 +172,7 @@ fun HomePreviewLoading() {
         Scaffold {
             HomeBody(
                 Resource.Loading,
+                {},
                 modifier = Modifier
                     .padding(it)
                     .fillMaxSize()

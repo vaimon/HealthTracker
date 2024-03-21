@@ -11,4 +11,6 @@ interface TrainingRepository {
         startDateTimestamp: Long,
         endDateTimestamp: Long
     ): Flow<Resource<List<TrainingEntity>>>
+
+    suspend fun getTrainingById(id: Int): TrainingEntity
 }

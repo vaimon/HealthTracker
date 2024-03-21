@@ -1,4 +1,4 @@
-package me.vaimon.healthtracker.screens.home.components
+package me.vaimon.healthtracker.screens.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

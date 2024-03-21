@@ -25,4 +25,7 @@ interface TrainingDao {
     @Transaction
     @Query("SELECT * FROM trainings WHERE startTime BETWEEN :start AND :end")
     fun getTrainingsInPeriod(start: Long, end: Long): Flow<List<TrainingData>>
+
+    @Query("SELECT * FROM trainings WHERE id = :id")
+    suspend fun getTrainingById(id: Int): TrainingData
 }

@@ -1,8 +1,11 @@
 package me.vaimon.healthtracker.util
 
+import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.layout
+import androidx.compose.ui.res.stringResource
+import me.vaimon.healthtracker.R
 
 @Composable
 fun Modifier.vertical() =
@@ -27,3 +30,10 @@ fun Modifier.conditional(
         this
     }
 }
+
+@Composable
+fun floatStringResource(
+    @StringRes measureRes: Int,
+    value: Float
+): String = if (value.isFinite()) stringResource(measureRes, value)
+else stringResource(R.string.skipped_value)

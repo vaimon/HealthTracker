@@ -16,6 +16,7 @@ import java.time.LocalDate
 @Composable
 fun ActivityCalendar(
     activityData: Map<LocalDate, TrainingDay>,
+    navigateToTrainingDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     val keys = remember {
@@ -52,7 +53,10 @@ fun ActivityCalendar(
         if (activityData[keys[page]]?.trainings?.isEmpty() == true) {
             TextStub(message = R.string.stub_no_day_activity)
         } else {
-            TrainingDayStats(trainingDay = activityData.getValue(keys[page]))
+            TrainingDayStats(
+                trainingDay = activityData.getValue(keys[page]),
+                navigateToTrainingDetails = navigateToTrainingDetails
+            )
         }
     }
 }

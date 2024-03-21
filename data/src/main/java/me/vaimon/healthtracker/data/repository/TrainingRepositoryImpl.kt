@@ -7,6 +7,7 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.withContext
 import me.vaimon.healthtracker.data.datasource.db.dao.TrainingDao
 import me.vaimon.healthtracker.data.models.TrainingData
 import me.vaimon.healthtracker.domain.entity.TrainingEntity
@@ -47,4 +48,8 @@ class TrainingRepositoryImpl @Inject constructor(
                 Log.e("HT_TrainingRepo_getByDate", it.toString())
                 emit(Resource.Error(it))
             }
+
+    override suspend fun getTrainingById(id: Int): TrainingEntity = withContext(Dispatchers.IO) {
+        trainingMapper.from(trainingDao.getTrainingById(id))
+    }
 }

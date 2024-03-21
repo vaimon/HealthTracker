@@ -1,5 +1,6 @@
 package me.vaimon.healthtracker.screens.home.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -30,10 +31,12 @@ import me.vaimon.healthtracker.models.TrainingDay
 import me.vaimon.healthtracker.theme.Grey
 import me.vaimon.healthtracker.theme.labelSecondary
 import me.vaimon.healthtracker.util.Formatter
+import me.vaimon.healthtracker.util.floatStringResource
 
 @Composable
 fun TrainingDayStats(
     trainingDay: TrainingDay,
+    navigateToTrainingDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column {
@@ -65,7 +68,12 @@ fun TrainingDayStats(
             modifier = modifier.fillMaxSize()
         ) {
             items(trainingDay.trainings) {
-                TrainingCard(training = it)
+                TrainingCard(
+                    training = it,
+                    onCardClick = {
+                        navigateToTrainingDetails(it.id)
+                    }
+                )
             }
         }
     }
@@ -74,10 +82,15 @@ fun TrainingDayStats(
 @Composable
 fun TrainingCard(
     training: Training,
+    onCardClick: (Training) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Card(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
+            .fillMaxWidth()
+            .clickable {
+                onCardClick(training)
+            },
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -91,25 +104,25 @@ fun TrainingCard(
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = stringResource(R.string.training_type_walk) + training.id,
+                    text = stringResource(R.string.training_type_walk),
                     style = MaterialTheme.typography.titleSmall
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 Row {
                     LabelWithIcon(
-                        title = training.averageSpeed.let {
-                            if (it.isFinite()) stringResource(R.string.measure_km_h, it)
-                            else stringResource(R.string.skipped_value)
-                        },
+                        title = floatStringResource(
+                            measureRes = R.string.measure_km_h,
+                            value = training.averageSpeed
+                        ),
                         iconRes = R.drawable.icon_speed,
                         tintColor = Grey
                     )
                     Spacer(modifier = Modifier.width(10.dp))
                     LabelWithIcon(
-                        title = training.totalDistance.let {
-                            if (it.isFinite()) stringResource(R.string.measure_km, it)
-                            else stringResource(R.string.skipped_value)
-                        },
+                        title = floatStringResource(
+                            measureRes = R.string.measure_km,
+                            value = training.totalDistance
+                        ),
                         iconRes = R.drawable.icon_distance,
                         tintColor = Grey
                     )

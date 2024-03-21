@@ -75,3 +75,12 @@ val Typography.labelSecondary: TextStyle
             color = Grey
         )
     }
+val Typography.titleMediumSmall: TextStyle
+    @Composable
+    get() {
+        return TextStyle(
+            fontFamily = interTightFamily,
+            fontWeight = FontWeight.Black,
+            fontSize = 20.sp
+        )
+    }

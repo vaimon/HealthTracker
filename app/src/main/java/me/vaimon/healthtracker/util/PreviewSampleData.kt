@@ -116,4 +116,12 @@ object PreviewSampleData {
             ),
         )
     )
+
+    val singleTraining = Training(
+        1, LocalDateTime.now(), LocalDateTime.now().plusMinutes(25), listOf(
+            RoutePoint(1, 47.21712807474157, 39.62848853319883, 1.5f, 0L),
+            RoutePoint(2, 47.21712807456718, 39.62848853320536, 5.5f, 0L),
+            RoutePoint(3, 47.21712807473566, 39.62848853311025, 2.5f, 0L),
+        )
+    )
 }

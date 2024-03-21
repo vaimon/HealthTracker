@@ -10,7 +10,7 @@ data class Training(
     val routePoints: List<RoutePoint>
 ) {
     val totalTrainingTimeSeconds = Duration.between(startTime, endTime).seconds
-    val averageSpeed = routePoints.map { it.speed ?: 0f }.average()
+    val averageSpeed = routePoints.map { it.speed ?: 0f }.average().toFloat()
     val totalDistance: Float
         get() {
             return Float.NaN
