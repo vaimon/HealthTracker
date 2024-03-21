@@ -8,6 +8,7 @@ import me.vaimon.healthtracker.domain.usecase.GetAggregatedTrainingsPeriodUseCas
 import me.vaimon.healthtracker.domain.util.Mapper
 import me.vaimon.healthtracker.domain.util.map
 import me.vaimon.healthtracker.models.Training
+import me.vaimon.healthtracker.models.TrainingDay
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,7 +19,9 @@ class HomeViewModel @Inject constructor(
     val trainings = getAggregatedTrainingsPeriodUseCase().map { resource ->
         resource.map { aggregatedMap ->
             aggregatedMap.mapValues { entry ->
-                entry.value.map { trainingMapper.from(it) }
+                TrainingDay(
+                    entry.value.map { trainingMapper.from(it) }
+                )
             }
         }
     }

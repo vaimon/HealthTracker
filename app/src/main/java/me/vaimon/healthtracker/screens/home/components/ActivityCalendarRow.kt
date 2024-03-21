@@ -2,6 +2,7 @@ package me.vaimon.healthtracker.screens.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -75,7 +76,12 @@ private fun AggregationDateColumn(
             .conditional(isSelected) {
                 background(MaterialTheme.colorScheme.surface)
             }
-            .clickable {
+            .clickable(
+                interactionSource = remember {
+                    MutableInteractionSource()
+                },
+                indication = null
+            ) {
                 onDaySelected(date)
             }
             .padding(8.dp),

@@ -19,7 +19,9 @@ class GetAggregatedTrainingsPeriodUseCase @Inject constructor(
         endDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toEpochSecond(),
     ).map { resource ->
         resource.map { trainingList ->
-            trainingList.groupBy {
+            trainingList.filter {
+                it.endTime != null
+            }.groupBy {
                 it.startTime.toLocalDate()
             }.toMutableMap().let { map ->
                 startDate.getDaysUntil(endDate).forEach {

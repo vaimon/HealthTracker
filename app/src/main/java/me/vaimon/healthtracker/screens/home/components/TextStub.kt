@@ -16,7 +16,7 @@ import me.vaimon.healthtracker.theme.labelStub
 
 @Composable
 fun TextStub(
-    @StringRes errorMessage: Int,
+    @StringRes message: Int,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -26,7 +26,7 @@ fun TextStub(
             .padding(32.dp)
     ) {
         Text(
-            text = stringResource(id = errorMessage),
+            text = stringResource(id = message),
             textAlign = TextAlign.Center,
             style = MaterialTheme.typography.labelStub,
         )

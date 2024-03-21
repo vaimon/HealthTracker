@@ -9,42 +9,47 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import me.vaimon.healthtracker.R
 
-val figTreeFamily = FontFamily(
-    Font(R.font.figtree)
+val interTightFamily = FontFamily(
+    Font(R.font.inter_tight)
 )
 
 // Set of Material typography styles to start with
 val Typography = Typography(
     bodyLarge = TextStyle(
-        fontFamily = figTreeFamily,
+        fontFamily = interTightFamily,
         fontWeight = FontWeight.Normal,
         fontSize = 16.sp,
         lineHeight = 24.sp,
         letterSpacing = 0.5.sp
     ),
     titleLarge = TextStyle(
-        fontFamily = figTreeFamily,
+        fontFamily = interTightFamily,
         fontWeight = FontWeight.Black,
         fontSize = 32.sp,
     ),
     titleMedium = TextStyle(
-        fontFamily = figTreeFamily,
+        fontFamily = interTightFamily,
         fontWeight = FontWeight.Black,
         fontSize = 24.sp,
     ),
+    titleSmall = TextStyle(
+        fontFamily = interTightFamily,
+        fontWeight = FontWeight.Black,
+        fontSize = 16.sp,
+    ),
     labelLarge = TextStyle(
-        fontFamily = figTreeFamily,
+        fontFamily = interTightFamily,
         fontWeight = FontWeight.Bold,
         fontSize = 18.sp,
     ),
     labelMedium = TextStyle(
-        fontFamily = figTreeFamily,
+        fontFamily = interTightFamily,
         fontWeight = FontWeight.Medium,
         fontSize = 14.sp,
     ),
     labelSmall = TextStyle(
-        fontFamily = figTreeFamily,
-        fontWeight = FontWeight.Bold,
+        fontFamily = interTightFamily,
+        fontWeight = FontWeight.Medium,
         fontSize = 12.sp,
     ),
 )
@@ -53,7 +58,7 @@ val Typography.labelStub: TextStyle
     @Composable
     get() {
         return TextStyle(
-            fontFamily = figTreeFamily,
+            fontFamily = interTightFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 18.sp,
             color = Grey
@@ -64,7 +69,7 @@ val Typography.labelSecondary: TextStyle
     @Composable
     get() {
         return TextStyle(
-            fontFamily = figTreeFamily,
+            fontFamily = interTightFamily,
             fontWeight = FontWeight.Medium,
             fontSize = 12.sp,
             color = Grey

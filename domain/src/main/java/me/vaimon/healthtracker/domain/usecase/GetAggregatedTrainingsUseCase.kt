@@ -11,7 +11,9 @@ class GetAggregatedTrainingsUseCase @Inject constructor(
     operator fun invoke() =
         trainingRepository.getAllTrainings().map { res ->
             res.map { trainingList ->
-                trainingList.groupBy {
+                trainingList.filter {
+                    it.endTime != null
+                }.groupBy {
                     it.startTime.toLocalDate()
                 }
             }

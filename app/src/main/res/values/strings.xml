@@ -10,10 +10,18 @@
     <string name="error_no_internet">It seems to be that you don\'t have an access to Internet</string>
     <string name="error_illegal_state">Something unexpected happened.\nTry again</string>
     <string name="error_unknown">Something went wrong :(\nTry again</string>
+
     <string name="stub_no_day_activity">There was no activity this day</string>
-    <string name="label_avg_speed">Avg. speed: %1$s</string>
+
     <string name="training_type_walk">Walk</string>
+
     <string name="measure_km_h">%1$.2f km\/h</string>
     <string name="measure_km">%1$.2f km</string>
-    <string name="skipped_value">-</string>
+
+    <string name="skipped_value" translatable="false">-</string>
+
+    <plurals name="number_trainings">
+        <item quantity="one">%1$d training</item>
+        <item quantity="other">%1$d trainings</item>
+    </plurals>
 </resources>

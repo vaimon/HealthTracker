@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">HealthTracker</string>
+    <string name="action_start_walk">Начать прогулку</string>
+    <string name="header_last_activity">Последняя активность</string>
+    <string name="warning_no_trainings">У вас нет записанных тренировок :(\\nМожет, пора начать?</string>
+    <string name="error_no_internet">Кажется, у вас нет доступа к Интернету</string>
+    <string name="error_illegal_state">Произошло что-то не то.\\nПопробуйте ещё раз.</string>
+    <string name="error_unknown">Что-то пошло не так :(\\nПопробуйте ещё раз</string>
+    <string name="stub_no_day_activity">В этот день у вас не было активности</string>
+    <string name="training_type_walk">Прогулка</string>
+    <string name="measure_km_h">%1$.2f км\/ч</string>
+    <string name="measure_km">%1$.2f км</string>
+    <plurals name="number_trainings">
+        <item quantity="one">%1$d тренировка</item>
+        <item quantity="few">%1$d тренировки</item>
+        <item quantity="many">%1$d тренировок</item>
+        <item quantity="other">%1$d тренировок</item>
+    </plurals>
+</resources>
