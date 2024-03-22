@@ -27,3 +27,16 @@ fun Modifier.conditional(
         this
     }
 }
+
+@Composable
+fun Modifier.conditional(
+    condition: Boolean,
+    ifTrue: @Composable Modifier.() -> Modifier,
+    ifFalse: @Composable Modifier.() -> Modifier
+): Modifier {
+    return if (condition) {
+        then(ifTrue(Modifier))
+    } else {
+        then(ifFalse(Modifier))
+    }
+}

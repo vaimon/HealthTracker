@@ -25,7 +25,6 @@ fun LargeActionButton(
     TextButton(
         onClick = onClick,
         colors = ButtonDefaults.textButtonColors(
-            containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary
         ),
         contentPadding = PaddingValues(vertical = 16.dp, horizontal = 64.dp),
