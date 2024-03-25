@@ -1,7 +1,6 @@
 package me.vaimon.healthtracker.screens.training_details
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,10 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,46 +21,30 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.JointType
-import com.google.android.gms.maps.model.RoundCap
-import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.MapProperties
-import com.google.maps.android.compose.MapType
-import com.google.maps.android.compose.MapUiSettings
-import com.google.maps.android.compose.Polyline
-import com.google.maps.android.compose.rememberCameraPositionState
 import me.vaimon.healthtracker.R
-import me.vaimon.healthtracker.models.RoutePoint
 import me.vaimon.healthtracker.models.Training
 import me.vaimon.healthtracker.navigation.NavigationDestinationWithArg
 import me.vaimon.healthtracker.screens.components.ResourceLoading
+import me.vaimon.healthtracker.screens.training_details.components.RouteMap
+import me.vaimon.healthtracker.screens.training_details.components.TrainingStatsCard
 import me.vaimon.healthtracker.theme.Grey
 import me.vaimon.healthtracker.theme.HealthTrackerTheme
-import me.vaimon.healthtracker.theme.labelSecondary
 import me.vaimon.healthtracker.theme.titleMediumSmall
 import me.vaimon.healthtracker.util.Formatter
 import me.vaimon.healthtracker.util.PreviewSampleData
-import me.vaimon.healthtracker.util.floatStringResource
 
 object TrainingDetailsDestination : NavigationDestinationWithArg<Int>() {
     override val routeBase = "trainingDetails"
     override val argName = "trainingId"
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TrainingDetailsScreen(
     navController: NavController,
@@ -162,114 +141,6 @@ fun TrainingDetailsBody(
                     .fillMaxWidth()
             )
         }
-    }
-}
-
-@Composable
-fun RouteMap(
-    routePoints: List<RoutePoint>,
-    modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(16.dp)
-) {
-    val mapProperties by remember {
-        mutableStateOf(
-            MapProperties(
-                maxZoomPreference = 30f,
-                minZoomPreference = 15f,
-                mapType = MapType.TERRAIN
-            )
-        )
-    }
-    val mapUiSettings by remember {
-        mutableStateOf(
-            MapUiSettings(
-                mapToolbarEnabled = false,
-                myLocationButtonEnabled = false,
-                indoorLevelPickerEnabled = false,
-                zoomControlsEnabled = false,
-                compassEnabled = false
-            )
-        )
-    }
-    val cameraPositionState = rememberCameraPositionState {
-        position = CameraPosition.fromLatLngZoom(routePoints.first().latLng, 18f)
-    }
-
-    Box(modifier.clip(shape)) {
-        GoogleMap(
-            properties = mapProperties,
-            uiSettings = mapUiSettings,
-            cameraPositionState = cameraPositionState,
-            modifier = Modifier.fillMaxSize(),
-        ) {
-            Polyline(
-                points = routePoints.map { it.latLng },
-                color = MaterialTheme.colorScheme.primary,
-                startCap = RoundCap(),
-                endCap = RoundCap(),
-                jointType = JointType.ROUND
-            )
-        }
-    }
-}
-
-@Composable
-fun TrainingStatsCard(
-    training: Training,
-    modifier: Modifier = Modifier,
-    shape: Shape = RoundedCornerShape(16.dp)
-) {
-    Card(
-        shape = shape,
-        modifier = modifier
-    ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(2),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
-            modifier = Modifier.padding(16.dp)
-        ) {
-            item {
-                LabeledStatItem(
-                    label = stringResource(R.string.label_avg_speed),
-                    value = floatStringResource(R.string.measure_km_h, training.averageSpeed)
-                )
-            }
-            item {
-                LabeledStatItem(
-                    label = stringResource(R.string.label_distance),
-                    value = floatStringResource(R.string.measure_km_h, training.totalDistance)
-                )
-            }
-            item {
-                LabeledStatItem(
-                    label = stringResource(R.string.label_total_time),
-                    value = Formatter.formatDuration(training.totalTrainingTimeSeconds)
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun LabeledStatItem(
-    label: String,
-    value: String,
-    modifier: Modifier = Modifier
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Text(
-            text = label,
-            style = MaterialTheme.typography.labelSecondary
-        )
-        Spacer(modifier = Modifier.size(4.dp))
-        Text(
-            text = value,
-            style = MaterialTheme.typography.labelMedium.copy(
-                fontWeight = FontWeight.Bold
-            )
-        )
     }
 }
 

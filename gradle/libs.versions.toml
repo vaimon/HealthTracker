@@ -16,6 +16,7 @@ junitVersion = "1.1.5"
 espressoCore = "3.5.1"
 
 mapsCompose = "4.3.3"
+androidMapsUtils = "3.8.2"
 navigation = "2.7.7"
 playServicesMaps = "18.2.0"
 roomVersion = "2.6.1"
@@ -54,6 +55,7 @@ androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref =
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomVersion" }
 
 maps-compose = { module = "com.google.maps.android:maps-compose", version.ref = "mapsCompose" }
+maps-utils = { module = "com.google.maps.android:android-maps-utils", version.ref = "androidMapsUtils" }
 play-services-maps = { module = "com.google.android.gms:play-services-maps", version.ref = "playServicesMaps" }
 
 hilt = { group = "com.google.dagger", name = "hilt-android", version.ref = "hilt" }

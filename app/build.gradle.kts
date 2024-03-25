@@ -96,6 +96,7 @@ dependencies {
     //Maps
     implementation(libs.play.services.maps)
     implementation(libs.maps.compose)
+    implementation(libs.maps.utils)
 
     // Testing
     testImplementation(libs.junit)
