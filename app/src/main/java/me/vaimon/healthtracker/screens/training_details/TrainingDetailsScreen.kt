@@ -26,6 +26,8 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
@@ -37,12 +39,16 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.google.android.gms.maps.model.CameraPosition
-import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.JointType
+import com.google.android.gms.maps.model.RoundCap
 import com.google.maps.android.compose.GoogleMap
-import com.google.maps.android.compose.Marker
-import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.MapProperties
+import com.google.maps.android.compose.MapType
+import com.google.maps.android.compose.MapUiSettings
+import com.google.maps.android.compose.Polyline
 import com.google.maps.android.compose.rememberCameraPositionState
 import me.vaimon.healthtracker.R
+import me.vaimon.healthtracker.models.RoutePoint
 import me.vaimon.healthtracker.models.Training
 import me.vaimon.healthtracker.navigation.NavigationDestinationWithArg
 import me.vaimon.healthtracker.screens.components.ResourceLoading
@@ -147,33 +153,61 @@ fun TrainingDetailsBody(
             modifier = Modifier.padding(16.dp)
         )
 
-        RouteMap(
-            modifier = Modifier
-                .padding(horizontal = 16.dp)
-                .aspectRatio(1f)
-                .fillMaxWidth()
-        )
+        if (training.routePoints.isNotEmpty()) {
+            RouteMap(
+                routePoints = training.routePoints,
+                modifier = Modifier
+                    .padding(horizontal = 16.dp)
+                    .aspectRatio(1f)
+                    .fillMaxWidth()
+            )
+        }
     }
 }
 
 @Composable
 fun RouteMap(
+    routePoints: List<RoutePoint>,
     modifier: Modifier = Modifier,
     shape: Shape = RoundedCornerShape(16.dp)
 ) {
+    val mapProperties by remember {
+        mutableStateOf(
+            MapProperties(
+                maxZoomPreference = 30f,
+                minZoomPreference = 15f,
+                mapType = MapType.TERRAIN
+            )
+        )
+    }
+    val mapUiSettings by remember {
+        mutableStateOf(
+            MapUiSettings(
+                mapToolbarEnabled = false,
+                myLocationButtonEnabled = false,
+                indoorLevelPickerEnabled = false,
+                zoomControlsEnabled = false,
+                compassEnabled = false
+            )
+        )
+    }
+    val cameraPositionState = rememberCameraPositionState {
+        position = CameraPosition.fromLatLngZoom(routePoints.first().latLng, 18f)
+    }
+
     Box(modifier.clip(shape)) {
-        val singapore = LatLng(1.35, 103.87)
-        val cameraPositionState = rememberCameraPositionState {
-            position = CameraPosition.fromLatLngZoom(singapore, 10f)
-        }
         GoogleMap(
+            properties = mapProperties,
+            uiSettings = mapUiSettings,
+            cameraPositionState = cameraPositionState,
             modifier = Modifier.fillMaxSize(),
-            cameraPositionState = cameraPositionState
         ) {
-            Marker(
-                state = MarkerState(position = singapore),
-                title = "Singapore",
-                snippet = "Marker in Singapore"
+            Polyline(
+                points = routePoints.map { it.latLng },
+                color = MaterialTheme.colorScheme.primary,
+                startCap = RoundCap(),
+                endCap = RoundCap(),
+                jointType = JointType.ROUND
             )
         }
     }

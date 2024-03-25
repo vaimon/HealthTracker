@@ -53,11 +53,12 @@ import me.vaimon.healthtracker.R
 import me.vaimon.healthtracker.domain.util.Resource
 import me.vaimon.healthtracker.models.TrainingDay
 import me.vaimon.healthtracker.navigation.NavigationDestination
+import me.vaimon.healthtracker.screens.components.ResourceLoading
 import me.vaimon.healthtracker.screens.home.components.ActivityCalendar
 import me.vaimon.healthtracker.screens.home.components.LargeActionButton
-import me.vaimon.healthtracker.screens.home.components.ResourceLoading
 import me.vaimon.healthtracker.screens.home.components.TextStub
 import me.vaimon.healthtracker.screens.home.state.ExtendingActivitySheetConnection
+import me.vaimon.healthtracker.screens.training_details.TrainingDetailsDestination
 import me.vaimon.healthtracker.theme.Dimens
 import me.vaimon.healthtracker.theme.HealthTrackerTheme
 import me.vaimon.healthtracker.util.ExceptionTranslator
@@ -78,13 +79,19 @@ fun HomeScreen(
     val trainingList = viewModel.trainings.collectAsState(initial = Resource.Loading)
 
     HomeBody(
-        trainings = trainingList.value, modifier = modifier
+        trainings = trainingList.value,
+        navigateToTrainingDetails = {
+            navController.navigate(TrainingDetailsDestination.getDestinationWithArg(it))
+        },
+        modifier = modifier
     )
 }
 
 @Composable
 fun HomeBody(
-    trainings: Resource<Map<LocalDate, TrainingDay>>, modifier: Modifier = Modifier
+    navigateToTrainingDetails: (Int) -> Unit,
+    trainings: Resource<Map<LocalDate, TrainingDay>>,
+    modifier: Modifier = Modifier
 ) {
     val currentTrainingHeightPx = with(LocalDensity.current) {
         Dimens.currentTrainingFieldHeight.roundToPx()
@@ -119,6 +126,7 @@ fun HomeBody(
             TrainingActivity(
                 trainings = trainings,
                 isFullScreen = { nestedScrollTrainingsConnection.offset == 0 },
+                navigateToTrainingDetails = navigateToTrainingDetails,
                 modifier = Modifier
                     .padding(top = with(LocalDensity.current) {
                         nestedScrollTrainingsConnection.offset.toDp()
@@ -231,6 +239,7 @@ fun ActionIconButton(
 fun TrainingActivity(
     trainings: Resource<Map<LocalDate, TrainingDay>>,
     isFullScreen: () -> Boolean,
+    navigateToTrainingDetails: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier
@@ -247,7 +256,10 @@ fun TrainingActivity(
         when (trainings) {
             is Resource.Error -> TextStub(message = ExceptionTranslator.translate(trainings.exception))
             is Resource.Loading -> ResourceLoading()
-            is Resource.Success -> ActivityCalendar(activityData = trainings.data)
+            is Resource.Success -> ActivityCalendar(
+                activityData = trainings.data,
+                navigateToTrainingDetails = navigateToTrainingDetails
+            )
         }
     }
 }
@@ -258,9 +270,10 @@ fun HomePreviewEmptyList() {
     HealthTrackerTheme {
         Scaffold {
             HomeBody(
+                {},
                 Resource.Success(emptyMap()), modifier = Modifier
                     .padding(it)
-                    .fillMaxSize()
+                    .fillMaxSize(),
             )
         }
     }
@@ -272,6 +285,7 @@ fun HomePreview() {
     HealthTrackerTheme {
         Scaffold {
             HomeBody(
+                {},
                 trainings = PreviewSampleData.trainings,
                 modifier = Modifier
                     .padding(it)
@@ -287,6 +301,7 @@ fun HomePreviewError() {
     HealthTrackerTheme {
         Scaffold {
             HomeBody(
+                {},
                 Resource.Error(IllegalStateException()),
                 modifier = Modifier
                     .padding(it)
@@ -302,6 +317,7 @@ fun HomePreviewLoading() {
     HealthTrackerTheme {
         Scaffold {
             HomeBody(
+                {},
                 Resource.Loading, modifier = Modifier
                     .padding(it)
                     .fillMaxSize()
