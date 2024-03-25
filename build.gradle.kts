@@ -4,6 +4,7 @@ buildscript {
     }
     dependencies {
         classpath(libs.navigation.safeArgs.plugin)
+        classpath(libs.secrets.gradle.plugin)
     }
 }
 

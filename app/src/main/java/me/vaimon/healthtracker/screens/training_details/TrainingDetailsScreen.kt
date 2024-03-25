@@ -1,5 +1,6 @@
 package me.vaimon.healthtracker.screens.training_details
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -35,6 +36,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import com.google.android.gms.maps.model.CameraPosition
+import com.google.android.gms.maps.model.LatLng
+import com.google.maps.android.compose.GoogleMap
+import com.google.maps.android.compose.Marker
+import com.google.maps.android.compose.MarkerState
+import com.google.maps.android.compose.rememberCameraPositionState
 import me.vaimon.healthtracker.R
 import me.vaimon.healthtracker.models.Training
 import me.vaimon.healthtracker.navigation.NavigationDestinationWithArg
@@ -132,6 +139,8 @@ fun TrainingDetailsBody(
 ) {
     Column(
         modifier = modifier
+            .background(MaterialTheme.colorScheme.primaryContainer)
+            .fillMaxSize()
     ) {
         TrainingStatsCard(
             training = training,
@@ -153,7 +162,20 @@ fun RouteMap(
     shape: Shape = RoundedCornerShape(16.dp)
 ) {
     Box(modifier.clip(shape)) {
-
+        val singapore = LatLng(1.35, 103.87)
+        val cameraPositionState = rememberCameraPositionState {
+            position = CameraPosition.fromLatLngZoom(singapore, 10f)
+        }
+        GoogleMap(
+            modifier = Modifier.fillMaxSize(),
+            cameraPositionState = cameraPositionState
+        ) {
+            Marker(
+                state = MarkerState(position = singapore),
+                title = "Singapore",
+                snippet = "Marker in Singapore"
+            )
+        }
     }
 }
 

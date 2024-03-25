@@ -4,7 +4,7 @@ plugins {
     alias(libs.plugins.hilt)
 
     id(libs.plugins.safeArgs.get().pluginId)
-//    alias(libs.plugins.ksp)
+    id(libs.plugins.secrets.get().pluginId)
     kotlin("kapt")
 }
 
@@ -42,6 +42,7 @@ android {
         jvmTarget = "1.8"
     }
     buildFeatures {
+        buildConfig = true
         compose = true
     }
     composeOptions {
@@ -52,6 +53,15 @@ android {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+secrets {
+    propertiesFileName = "secrets.properties"
+
+    defaultPropertiesFileName = "local.defaults.properties"
+
+    ignoreList.add("keyToIgnore") // Ignore the key "keyToIgnore"
+    ignoreList.add("sdk.*")       // Ignore all keys matching the regexp "sdk.*"
 }
 
 dependencies {
@@ -82,6 +92,10 @@ dependencies {
 
     // Navigation
     implementation(libs.navigation)
+
+    //Maps
+    implementation(libs.play.services.maps)
+    implementation(libs.maps.compose)
 
     // Testing
     testImplementation(libs.junit)
